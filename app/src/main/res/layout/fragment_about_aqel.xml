@@ -1,0 +1,175 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="in.aqel.blogger.AboutAqelFragment"
+    android:weightSum="1"
+    android:orientation="vertical"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <ImageView
+            android:layout_width="189dp"
+            android:layout_height="189dp"
+            android:id="@+id/imageView"
+            android:background="@drawable/aqel"
+            android:layout_gravity="center_horizontal"
+            />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/subject"
+            android:padding="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AQEL AHAMMAD"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/textView"
+                android:textColor="#777"
+                android:textStyle="bold|italic"
+                android:textSize="18dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
+                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:text="I am a serial coder, android lover and an IITian. Connect with Me"
+                android:id="@+id/about_main_messsage"
+                android:padding="16dp"
+                android:layout_gravity="center"
+                android:singleLine="false"
+                android:fontFamily="sans-serif-light"
+                android:textSize="16dp"
+                android:textColor="#222"
+                />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#d3d7d9"
+                />
+
+            <LinearLayout
+                android:id="@+id/contact_facebook_aqel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:background="@drawable/rate_on_play_store_bg"
+                >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/facebook"
+                    android:layout_marginLeft="24dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Facebook Me"
+                    android:textSize="14dp"
+                    android:textColor="#555"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#d3d7d9"
+                />
+
+
+            <LinearLayout
+                android:id="@+id/contact_email_aqel"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:background="@drawable/rate_on_play_store_bg"
+                >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/gmail"
+                    android:layout_marginLeft="24dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Mail Me"
+                    android:textSize="14dp"
+                    android:paddingTop="12dp"
+                    android:textColor="#555"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#d3d7d9"
+                />
+            <LinearLayout
+                android:id="@+id/contact_reprot_bug"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:onClick="onClick"
+                android:background="@drawable/rate_on_play_store_bg"
+                >
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="fill_parent"
+                    android:src="@drawable/bug"
+                    android:layout_marginLeft="24dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Report a bug"
+                    android:textSize="14dp"
+                    android:textColor="#555"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

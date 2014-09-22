@@ -1,0 +1,9 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+    </style>
+    <color name="notification_settings_time_picker_bg_default">#fff</color>
+    <color name="notification_settings_time_picker_bg_pressed">#6633b5e5</color>
+</resources>

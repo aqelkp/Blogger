@@ -1,0 +1,111 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="in.aqel.blogger.AboutBlogger"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="#d3d7d9"
+    >
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_gravity="right"
+        android:fillViewport="false" >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            tools:context="in.aqel.blogger.AboutBlogger"
+            android:paddingLeft="100dp"
+            android:paddingRight="100dp"
+            android:id="@+id/ll8">
+            <ImageView
+                android:layout_width="160dp"
+                android:layout_height="212dp"
+                android:id="@+id/imageView"
+                android:layout_gravity="center_horizontal|top"
+                android:background="@drawable/babuka"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+
+                />
+        </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Faisal"
+                android:id="@+id/tvName"
+                android:layout_gravity="center"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#ff7233ff" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ABOUT ME"
+                android:id="@+id/about_the_app"
+                android:layout_gravity="left"
+                android:textColor="#777"
+                android:textStyle="italic"
+                android:textSize="18dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
+                android:padding="12dp" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/subject"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/aboutMeMal"
+                    android:id="@+id/textView2"
+                    android:padding="16dp"
+                    android:lineSpacingExtra="4dp"
+                    android:layout_gravity="center"
+                    android:singleLine="false"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="21dp"
+                    android:textColor="#555"
+                    />
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="10dp"
+                android:text="@string/aboutMeMala"
+                android:id="@+id/textView2a"
+                android:layout_gravity="center_horizontal"
+                android:textSize="21sp"
+                android:visibility="invisible"
+
+                />
+
+        </LinearLayout>
+
+     </ScrollView>
+
+
+
+</LinearLayout>
