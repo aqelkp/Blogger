@@ -1,40 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:id="@+id/linearLayout1"
-    android:background="#FFFFFFFF"
+    android:padding="3dp"
+    >
+<LinearLayout
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="match_parent"
+    android:background="#ffffff"
     android:padding="8dp"
     >
   <!-- Name Label -->
   <TextView android:id="@+id/tvTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textSize="25dip"
+            android:textSize="21sp"
             android:textStyle="bold"
-            android:paddingTop="10dip"
-            android:paddingBottom="10dip"
-            android:textColor="#dc6800"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="#6f7274"
       android:text="Title" />
   <!-- Description Label -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        >
   <TextView android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+          android:text="16-87"
+          android:textSize="15sp"
+          android:paddingLeft="4dp"
+          android:paddingRight="4dp"
+            android:background="@android:color/darker_gray"
+
+      />
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#acacac"
-      android:text="1083232"
-      android:paddingBottom="10dip"
-      android:textSize="20sp"
-      android:paddingLeft="20dp"
-      android:paddingRight="20dp" />
+
+
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="@android:color/white"
+
+            />
+</LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
   <!-- Price Label -->
   <TextView android:id="@+id/tvContent"
       		android:layout_width="fill_parent"
       		android:layout_height="wrap_content"
-      		android:textStyle="bold"
-            android:text="content"
-            android:textSize="22sp"
-      android:paddingBottom="20dp" />
+      android:text="content"
+            android:textSize="15sp"
+      android:paddingTop="4dp"
+      android:paddingBottom="14dp"
+      android:textStyle="bold"
+      android:editable="false" />
 
 </LinearLayout>
+    </LinearLayout>

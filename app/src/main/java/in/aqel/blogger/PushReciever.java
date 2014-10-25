@@ -12,9 +12,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import java.util.List;
 
 
 public class PushReciever extends Activity {
@@ -22,8 +29,60 @@ public class PushReciever extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new getXMLAsync().execute();
+        new parseNotifications().execute();
+        //new getXMLAsync().execute();
         setContentView(R.layout.activity_push_reciever);
+    }
+
+    public class parseNotifications extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(PushReciever.this);
+            pDialog.setMessage("Loading");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ParseQuery<ParseObject> query;
+            query = ParseQuery.getQuery("posts");
+            query.setLimit(20);
+            // Sorts the results in descending order by the score field
+            query.orderByDescending("date");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> userList, ParseException e) {
+                    if (e == null) {
+                        Log.d("score", "Retrieved " + userList.size() + " posts");
+                        DatabaseHelper data = new DatabaseHelper(PushReciever.this);
+                        data.open();
+                        for (int i=0; i<userList.size(); i++){
+                            ParseObject parseList = userList.get(i);
+                            data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), parseList.getString("content"), parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
+                            data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), parseList.getString("content"), parseList.getString("date"), parseList.getString("title"));
+                        }
+                        data.close();
+                    } else {
+                        Log.d("score", "Error: " + e.getMessage());
+                    }
+                }
+            });
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pDialog.dismiss();
+            Intent intent = new Intent(PushReciever.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+
+        }
     }
 
     public class getXMLAsync extends AsyncTask<Void, Void, Void> {
@@ -36,7 +95,7 @@ public class PushReciever extends Activity {
         static final String KEY_DATE = "published";
         SharedPreferences xmlStore;
         String[] id, title, content, date;
-        MalalyalamConverter converter = new MalalyalamConverter();
+        StringFormatter converter = new StringFormatter();
         private ProgressDialog pDialog;
         DatabaseHelper data = new DatabaseHelper(PushReciever.this);
 
@@ -88,7 +147,7 @@ public class PushReciever extends Activity {
                     String contentString = parser.getValue(e, KEY_CONTENT);
                     content[i] = contentString;
                     date[i] = parser.getValue(e, KEY_DATE);
-                    data.addPost(id[i], content[i], date[i], title[i]);
+                    data.addPost(id[i],1, content[i], date[i], title[i]);
                 }
                 data.close();
             } else {

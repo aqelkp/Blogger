@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class AboutBlogger extends Fragment {
@@ -38,14 +37,14 @@ public class AboutBlogger extends Fragment {
         super.onStart();
         TextView Name = (TextView) getView().findViewById(R.id.tvName);
         TextView AboutMe = (TextView) getView().findViewById(R.id.textView2);
-        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "karthika.ttf");
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "karthika.TTF");
         Name.setTypeface(font);
         AboutMe.setTypeface(font);
-        MalalyalamConverter converter = new MalalyalamConverter();
+        //StringFormatter converter = new StringFormatter();
         String name = getResources().getString(R.string.faisalMal);
         String aboutMe = getResources().getString(R.string.aboutMeMal);
-        name = converter.ConvertToMalayalam(name);
-        aboutMe = converter.ConvertToMalayalam(aboutMe);
+        //name = converter.ConvertToMalayalam(name);
+        //aboutMe = converter.ConvertToMalayalam(aboutMe);
         Name.setText(name);
         AboutMe.setText(aboutMe);
     }

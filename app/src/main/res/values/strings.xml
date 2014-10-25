@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Oorkadavu</string>
+    <string name="app_name">Vaayanashala</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">Oorkadavu</string>
+    <string name="title_activity_main">Vaayanashala</string>
     <string name="title_section1">Home</string>
     <string name="title_section2">About Me</string>
     <string name="title_section3">About Developer</string>
@@ -20,5 +20,7 @@
     <string name="aboutMeMala">എകാന്‍ പ്രവയിലെ കുന്‍ഫുദ എന്ന കൊച്ചു പട്ടണത്തില്‍ പ്രവാസിയായി ഞാനും ......</string>
     <string name="faisalMal">ഫൈസല്‍ ബാബു</string>
     <string name="title_activity_push_reciever">Updating Blog</string>
+    <string name="title_activity_place_holder">PlaceHolderActivity</string>
+
 
 </resources>

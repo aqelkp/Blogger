@@ -23,10 +23,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -42,12 +38,20 @@ public class PlaceholderFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         SharedPreferences xmlStore = getActivity().getSharedPreferences("xmlStore", Context.MODE_PRIVATE);
         if (xmlStore.getInt("loadedInt", 0) == 0){
-            new getXMLAsync().execute();
+            ConnectivityManager connMgr =
+                    (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+            if (activeInfo != null && activeInfo.isConnected()) {
+                new getXMLAsync().execute();
+            }else{
+                Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
+            }
         }else {
             ListView list = (ListView) rootView.findViewById(R.id.listView);
             DatabaseHelper data = new DatabaseHelper(getActivity());
             data.open();
-            Cursor cur = data.getAllData();
+            Cursor cur = data.getAllData(2);
             if (cur != null) {
                 CustomCursorAdapter customAdapter = new CustomCursorAdapter(getActivity(), cur);
                 list.setAdapter(customAdapter);
@@ -86,7 +90,7 @@ public class PlaceholderFragment extends Fragment {
         static final String KEY_DATE = "published";
         SharedPreferences xmlStore;
         String[] id,title,content, date ;
-        MalalyalamConverter converter = new MalalyalamConverter();
+        StringFormatter converter = new StringFormatter();
         private ProgressDialog pDialog;
         DatabaseHelper data = new DatabaseHelper(getActivity());
 
@@ -106,49 +110,46 @@ public class PlaceholderFragment extends Fragment {
             XMLParser parser = new XMLParser();
             String xml = null;
 
-                ConnectivityManager connMgr =
-                        (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-                NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
                 SharedPreferences xmlStore = getActivity().getSharedPreferences("xmlStore", Context.MODE_PRIVATE);
+            ConnectivityManager connMgr =
+                    (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
                 if (activeInfo != null && activeInfo.isConnected()) {
                     xml = parser.getXmlFromUrl(URL);
-                    Log.d("xml", xml);
-                    SharedPreferences.Editor editor = xmlStore.edit();
-                    editor.putString("xml",xml);
-                    editor.putInt("loadedInt", 1);
-                    editor.commit();
-                    Document doc = parser.getDomElement(xml); // getting DOM element
-                    NodeList nl = doc.getElementsByTagName(KEY_ITEM);
-                    // looping through all item nodes <item>
+                    if (!xml.equals("sorry")) {
+//                    Log.d("xml", xml);
+                        SharedPreferences.Editor editor = xmlStore.edit();
+                        editor.putString("xml", xml);
+                        editor.putInt("loadedInt", 1);
+                        editor.commit();
+                        Document doc = parser.getDomElement(xml); // getting DOM element
+                        NodeList nl = doc.getElementsByTagName(KEY_ITEM);
+                        // looping through all item nodes <item>
 
-                    id = new String[nl.getLength()];
-                    title = new String[nl.getLength()];
-                    content= new String[nl.getLength()];
-                    date= new String[nl.getLength()];
+                        id = new String[nl.getLength()];
+                        title = new String[nl.getLength()];
+                        content = new String[nl.getLength()];
+                        date = new String[nl.getLength()];
 
-                    data.open();
+                        data.open();
 
-                    for (int i = 0; i < nl.getLength(); i++) {
-                        Element e = (Element) nl.item(i);
-                        id[i] = parser.getValue(e, KEY_ID);
-                        String titleString = converter.ConvertToMalayalam(parser.getValue(e, KEY_TITLE));
-                        title[i] = titleString;
-                        String contentString = parser.getValue(e, KEY_CONTENT);
-                        content[i] = contentString;
-                        String dateString = parser.getValue(e, KEY_DATE);
-                        Date dateOb = null;
-                        try {
-                            dateOb = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(dateString);
-                            dateString = new SimpleDateFormat("dd/MM/yyyy").format(dateOb).toString();
-                        } catch (ParseException eb) {
-                            eb.printStackTrace();
+                        for (int i = nl.getLength()-1; i >= 0; i--) {
+                            Element e = (Element) nl.item(i);
+
+                            id[i] = parser.getValue(e, KEY_ID);
+                            String titleString = parser.getValue(e, KEY_TITLE);
+                            title[i] = titleString;
+                            String contentString = parser.getValue(e, KEY_CONTENT);
+                            content[i] = contentString;
+                            String dateString = parser.getValue(e, KEY_DATE);
+                            date[i] = dateString;
+                            data.addPost(id[i],2 ,content[i], dateString, title[i]);
+                            Log.d("date", title[i]);
                         }
-                        data.addPost(id[i],content[i],dateString,title[i]);
-                        Log.d("date", dateString);
+                        data.close();
                     }
-                    data.close();
                 }else{
                     Toast.makeText(getActivity(), "Check your internet connection", Toast.LENGTH_SHORT).show();
                 }
@@ -163,11 +164,12 @@ public class PlaceholderFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             pDialog.dismiss();
-    //        CustomListAdapter adapter = new
-    //                CustomListAdapter(getActivity(), id, title, content, date);
+            //CustomListAdapter adapter = new
+             //       CustomListAdapter(getActivity(), id, title, title, date);
             ListView list=(ListView) getView().findViewById(R.id.listView);
+
             data.open();
-            Cursor cur = data.getAllData();
+            Cursor cur = data.getAllData(2);
             if (cur != null) {
                 CustomCursorAdapter customAdapter = new CustomCursorAdapter(getActivity(), cur);
                 list.setAdapter(customAdapter);
@@ -175,7 +177,7 @@ public class PlaceholderFragment extends Fragment {
             data.close();
 
 
-            //list.setAdapter(adapter);
+          //  list.setAdapter(adapter);
             /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -189,6 +191,8 @@ public class PlaceholderFragment extends Fragment {
             });*/
             super.onPostExecute(aVoid);
         }
+
+
 
     }
 

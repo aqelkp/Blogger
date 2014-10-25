@@ -17,7 +17,7 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     private final String[] title;
     private final String[] content;
     private final String[] date;
-    MalalyalamConverter converter = new MalalyalamConverter();
+    StringFormatter converter = new StringFormatter();
     public CustomListAdapter(Activity context,
                              String[] id, String[] title, String[] content, String[] date) {
         super(context, R.layout.single_list_item, id);
@@ -30,20 +30,22 @@ public class CustomListAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
+
         View rowView= inflater.inflate(R.layout.single_list_item, null, true);
         TextView tvDate = (TextView) rowView.findViewById(R.id.tvDate);
         TextView tvContent = (TextView) rowView.findViewById(R.id.tvContent);
         TextView tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
         tvDate.setText(date[position]);
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "karthika.ttf");
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(), "karthika.TTF");
         tvContent.setTypeface(font);
         String str = content[position];
-        if (str.length() > 300) {
-            str = str.substring(0, Math.min(str.length(), 300)) + "...";
-        }
+//        if (str.length() > 300) {
+//            str = str.substring(0, Math.min(str.length(), 300)) + "...";
+//        }
         tvContent.setText(str);
          tvTitle.setTypeface(font);
         tvTitle.setText(title[position]);
+
         return rowView;
     }
 }

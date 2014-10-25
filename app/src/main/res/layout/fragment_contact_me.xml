@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="in.aqel.blogger.ContactFragment"
-    android:background="#d3d7d9"
+    android:background="@color/background"
     android:padding="10dp"
     android:orientation="vertical"
 

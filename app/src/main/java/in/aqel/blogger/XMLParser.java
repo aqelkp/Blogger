@@ -5,8 +5,11 @@ import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -39,13 +42,24 @@ public class XMLParser {
 
 		try {
 			// defaultHttpClient
-			DefaultHttpClient httpClient = new DefaultHttpClient();
-			HttpPost httpPost = new HttpPost(url);
+			HttpGet httpPost = new HttpGet(url);
+            HttpParams httpParameters = new BasicHttpParams();
+                // Set the timeout in milliseconds until a connection is established.
+                // The default value is zero, that means the timeout is not used.
+            int timeoutConnection = 30000;
+            HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+                // Set the default socket timeout (SO_TIMEOUT)
+                // in milliseconds which is the timeout for waiting for data.
+            int timeoutSocket = 30000;
+            HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+            DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			xml = EntityUtils.toString(httpEntity);
-            Log.d("xml", xml);
-
+            if (xml.equals(null)){
+                xml = "sorry";
+            }
 
 
 		} catch (UnsupportedEncodingException e) {
@@ -106,5 +120,6 @@ public class XMLParser {
 	 public String getValue(Element item, String str) {
 			NodeList n = item.getElementsByTagName(str);
 			return this.getElementValue(n.item(0));
-		}
+
+        }
 }

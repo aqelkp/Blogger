@@ -2,8 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="in.aqel.blogger.DetailView" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_favourite"
+        android:title="Add to favourites"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:icon="@android:drawable/btn_star_big_off"
+        app:showAsAction="always" />
+    <item android:id="@+id/action_read_later"
+        android:title="Read Later"
+        android:orderInCategory="90"
+        android:icon="@android:drawable/ic_input_get"
+        app:showAsAction="always" />
 </menu>

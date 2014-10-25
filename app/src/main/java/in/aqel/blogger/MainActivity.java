@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.parse.Parse;
 import com.parse.PushService;
 
 
@@ -36,8 +35,7 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Parse.initialize(this, "li4FMZCln6gtkgvRGO6BElCg69OrJ5BmJTKs3kqv", "gEoGoeFgLshWUSv4qlRjtpC140wF3Rjq8jugarIT");
-        PushService.setDefaultPushCallback(this, PushReciever.class);
+        PushService.setDefaultPushCallback(MainActivity.this, PushReciever.class);
 
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -50,6 +48,8 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
+
+
     }
 
     @Override
@@ -58,33 +58,50 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         switch (position){
-            case 1:
+
+            case 4:
                 Fragment fragment = new AboutBlogger();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment).commit();
                 setTitle("About Me");
                 break;
             case 0:
-                Fragment fragmentHome = new PlaceholderFragment();
+                Fragment fragmentHome = new Notifications();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragmentHome).commit();
                 setTitle("Home");
                 break;
-            case 2:
+            case 5:
                 Fragment fragmentContacts = new ContactFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragmentContacts).commit();
                 setTitle("Contact Me");
                 break;
-            case 3:
+            case 6:
                 Fragment fragmentAboutAqel = new AboutAqelFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragmentAboutAqel).commit();
                 setTitle("Aqel Ahammad");
                 break;
-            case 4:
-                super.finish();
+            case 2:
+                Fragment fragmentFavourites = new FavouritesFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragmentFavourites).commit();
+                setTitle("Favourites");
                 break;
+            case 3:
+                Fragment fragmentReadLater = new FavouritesFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragmentReadLater).commit();
+                setTitle("Read Later");
+                break;
+            case 1:
+                Fragment fragmentBloggerList = new BloggersList();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragmentBloggerList).commit();
+                setTitle("Bloggers");
+                break;
+
         }
     }
 

@@ -6,4 +6,8 @@
     </style>
     <color name="notification_settings_time_picker_bg_default">#fff</color>
     <color name="notification_settings_time_picker_bg_pressed">#6633b5e5</color>
+    <color name="background">#ffe7e7e7</color>
+    <color name="font_color">#6f7274</color>
+    <color name="actionbar_background">#ff5c7b00</color>
+    <color name="drawer_background">#c14a7a40</color>
 </resources>

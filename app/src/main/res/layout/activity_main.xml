@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="in.aqel.blogger.MainActivity"
-    android:background="#d3d7d9"
+    android:background="@color/background"
     >
 
     <!-- As the main content view, the view below consumes the entire

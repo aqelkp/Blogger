@@ -3,7 +3,15 @@ package in.aqel.blogger;
 /**
  * Created by aqel on 21/9/14.
  */
-public class MalalyalamConverter {
+public class StringFormatter {
+    public String ConvertDate (String dateObj){
+        //2014-09-05T11:09:00.001+03:00
+        String year = Character.toString(dateObj.charAt(0)) + Character.toString(dateObj.charAt(1)) + Character.toString(dateObj.charAt(2)) + Character.toString(dateObj.charAt(3));
+        String month = Character.toString(dateObj.charAt(5))+ Character.toString(dateObj.charAt(6));
+        String day = Character.toString(dateObj.charAt(8)) + Character.toString(dateObj.charAt(9));
+        return day + " - " + month + " - " + year ;
+
+    }
 
     public String ConvertToMalayalam(String text){
 
