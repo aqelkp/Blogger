@@ -23,15 +23,20 @@ public class FavouritesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
-        ListView list = (ListView) rootView.findViewById(R.id.listView);
+        View rootView;
         DatabaseHelper data = new DatabaseHelper(getActivity());
         data.open();
         Cursor cur = data.getAllFavourites();
-        if (cur != null) {
+        if (cur.getCount()>0){
+            rootView = inflater.inflate(R.layout.fragment_favourites, container, false);
+            ListView list = (ListView) rootView.findViewById(R.id.listView);
             CustomCursorAdapter customAdapter = new CustomCursorAdapter(getActivity(), cur);
             list.setAdapter(customAdapter);
+        }else{
+            rootView = inflater.inflate(R.layout.favoutrites_null, container, false);
+
         }
+
         data.close();
         return rootView;
     }

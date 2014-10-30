@@ -116,9 +116,7 @@ public class PlaceHolderActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -162,7 +160,7 @@ public class PlaceHolderActivity extends ActionBarActivity {
             NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
             if (activeInfo != null && activeInfo.isConnected()) {
                 xml = parser.getXmlFromUrl(URL);
-                if (!xml.equals("sorry")) {
+
                     Log.d("xml", xml);
                     SharedPreferences.Editor editor = xmlStore.edit();
                     editor.putString("xml", xml);
@@ -196,7 +194,7 @@ public class PlaceHolderActivity extends ActionBarActivity {
                     }
                     data.updateAsLoaded(bloggerId);
                     data.close();
-                }
+
             }else{
                 Toast.makeText(PlaceHolderActivity.this , "Check your internet connection", Toast.LENGTH_SHORT).show();
             }

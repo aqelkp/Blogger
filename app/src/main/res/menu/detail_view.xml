@@ -11,5 +11,5 @@
         android:title="Read Later"
         android:orderInCategory="90"
         android:icon="@android:drawable/ic_input_get"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

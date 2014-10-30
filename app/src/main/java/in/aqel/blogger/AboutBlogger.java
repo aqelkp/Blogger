@@ -1,25 +1,15 @@
 package in.aqel.blogger;
 
-import android.graphics.Typeface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 
 public class AboutBlogger extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
 
 
     public AboutBlogger() {
@@ -35,7 +25,7 @@ public class AboutBlogger extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        TextView Name = (TextView) getView().findViewById(R.id.tvName);
+       /* TextView Name = (TextView) getView().findViewById(R.id.tvName);
         TextView AboutMe = (TextView) getView().findViewById(R.id.textView2);
         Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "karthika.TTF");
         Name.setTypeface(font);
@@ -46,7 +36,8 @@ public class AboutBlogger extends Fragment {
         //name = converter.ConvertToMalayalam(name);
         //aboutMe = converter.ConvertToMalayalam(aboutMe);
         Name.setText(name);
-        AboutMe.setText(aboutMe);
+        AboutMe.setText(aboutMe);*/
+
     }
 
     @Override
@@ -55,8 +46,26 @@ public class AboutBlogger extends Fragment {
         View view = inflater.inflate(R.layout.fragment_about_blogger, container, false);
         // Inflate the layout for this fragment
 
+        View rootView = inflater.inflate(R.layout.fragment_bloggers_list, container, false);
 
-        return inflater.inflate(R.layout.fragment_about_blogger, container, false);
+
+
+            ListView list = (ListView) rootView.findViewById(R.id.listView);
+            DatabaseHelper data = new DatabaseHelper(getActivity());
+            data.open();
+            Cursor cur = data.getAllBloggers();
+            if (cur != null) {
+                BloggerContactsAdapter customAdapter = new BloggerContactsAdapter(getActivity(), cur);
+                for (cur.moveToLast(); !cur.isBeforeFirst(); cur.moveToPrevious()) {
+
+                }
+                list.setAdapter(customAdapter);
+            }
+            data.close();
+
+
+
+        return rootView;
     }
 
 

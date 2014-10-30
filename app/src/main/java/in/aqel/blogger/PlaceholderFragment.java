@@ -70,14 +70,9 @@ public class PlaceholderFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                new getXMLAsync().execute();
-                return true;
 
-            default:
                 return super.onOptionsItemSelected(item);
-        }
+
     }
 
     public class getXMLAsync extends AsyncTask<Void, Void, Void> {

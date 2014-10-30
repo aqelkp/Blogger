@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
@@ -88,6 +87,15 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[6];
+
+        drawerItem[0] = new ObjectDrawerItem(R.drawable.nav_home, "Home");
+        drawerItem[1] = new ObjectDrawerItem(R.drawable.nav_bloggers, "Bloggers");
+        drawerItem[2] = new ObjectDrawerItem(R.drawable.nav_fav, "Favourties");
+        drawerItem[3] = new ObjectDrawerItem(R.drawable.nav_read_later, "Read Later");
+        drawerItem[4] = new ObjectDrawerItem(R.drawable.nav_abt_blogger, "About Bloggers");
+        drawerItem[5] = new ObjectDrawerItem(R.drawable.nav_abt_us, "About Us");
+
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -96,7 +104,10 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(getActivity(), R.layout.drawer_single_list, drawerItem);
+        mDrawerListView.setAdapter(adapter);
+       /* mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -104,7 +115,7 @@ public class NavigationDrawerFragment extends Fragment {
                           "Home", "Bloggers","Favourites","Read Later",
                         getString(R.string.title_section2),"Contact Me",
                         getString(R.string.title_section3)
-                }));
+                }));*/
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

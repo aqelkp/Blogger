@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -48,8 +49,11 @@ public class PushReciever extends Activity {
         }
         @Override
         protected Void doInBackground(Void... voids) {
+            final SharedPreferences lastNotif = getSharedPreferences("lastNotif", Context.MODE_PRIVATE);
+            final int notification_number = lastNotif.getInt("lastNotif",0);
             ParseQuery<ParseObject> query;
             query = ParseQuery.getQuery("posts");
+            query.whereGreaterThan("notification_number", notification_number);
             query.setLimit(20);
             // Sorts the results in descending order by the score field
             query.orderByDescending("date");
@@ -59,11 +63,21 @@ public class PushReciever extends Activity {
                         Log.d("score", "Retrieved " + userList.size() + " posts");
                         DatabaseHelper data = new DatabaseHelper(PushReciever.this);
                         data.open();
+                        int new_notif_num = notification_number;
                         for (int i=0; i<userList.size(); i++){
                             ParseObject parseList = userList.get(i);
-                            data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), parseList.getString("content"), parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
-                            data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), parseList.getString("content"), parseList.getString("date"), parseList.getString("title"));
+                            if (notification_number < parseList.getInt("notification_number")){
+                                new_notif_num = parseList.getInt("notification_number");
+                            }
+
+                            Log.d("notification Number", Integer.toString(parseList.getInt("notification_number")));
+                            String content  = Html.fromHtml(parseList.getString("content")).toString();
+                            data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
+                            data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"));
                         }
+                        SharedPreferences.Editor editor = lastNotif.edit();
+                        editor.putInt("lastNotif", new_notif_num);
+                        editor.commit();
                         data.close();
                     } else {
                         Log.d("score", "Error: " + e.getMessage());

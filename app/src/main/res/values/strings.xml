@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Vaayanashala</string>
+    <string name="app_name">Vayanashala</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main">Vaayanashala</string>
+    <string name="title_activity_main">Vayanashala</string>
     <string name="title_section1">Home</string>
     <string name="title_section2">About Me</string>
     <string name="title_section3">About Developer</string>
@@ -21,6 +21,7 @@
     <string name="faisalMal">ഫൈസല്‍ ബാബു</string>
     <string name="title_activity_push_reciever">Updating Blog</string>
     <string name="title_activity_place_holder">PlaceHolderActivity</string>
-
+    <string name="banner_ad_unit_id">ca-app-pub-0669510740947238/8724906539</string>
+    <string name="title_activity_about_blogger">AboutBloggerActivity</string>
 
 </resources>

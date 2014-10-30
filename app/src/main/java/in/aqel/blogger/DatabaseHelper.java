@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.Html;
 import android.util.Log;
 
 public class DatabaseHelper {
@@ -14,6 +15,7 @@ public class DatabaseHelper {
     public static final String KEY_BLOG_ID = "blog_id";
     public static final String KEY_BLOGGER_ID = "blogger_id";
     public static final String KEY_CONTENT = "content";
+    public static final String KEY_CONTENT_SHORT = "content_short";
     public static final String KEY_TITLE = "title";
     private static final String KEY_READ_OR_NOT = "readOrNot";
     private static final String KEY_IS_FAV_OR_NOT = "isFav";
@@ -51,7 +53,8 @@ public class DatabaseHelper {
                             " TEXT NOT NULL, " + KEY_DATE + " TEXT NOT NULL, " + KEY_TITLE +
                             " TEXT NOT NULL, " +  KEY_READ_OR_NOT +
                             " INTEGER NOT NULL, "+  KEY_IS_FAV_OR_NOT +
-                            " INTEGER NOT NULL " +" );"
+                            " INTEGER NOT NULL, "+ KEY_CONTENT_SHORT +
+                            " TEXT NOT NULL " +" );"
             );
 
             db.execSQL("CREATE TABLE " + DATABASE_READ_LATER_TABLE + " ( " + KEY_ROWID + " INTEGER PRIMARY" +
@@ -60,7 +63,8 @@ public class DatabaseHelper {
                             " TEXT NOT NULL, " + KEY_DATE + " TEXT NOT NULL, " + KEY_TITLE +
                             " TEXT NOT NULL, " +  KEY_READ_OR_NOT +
                             " INTEGER NOT NULL, "+  KEY_IS_FAV_OR_NOT +
-                            " INTEGER NOT NULL " +" );"
+                            " INTEGER NOT NULL, " + KEY_CONTENT_SHORT +
+                            " TEXT NOT NULL " +" );"
             );
 
             db.execSQL("CREATE TABLE " + DATABASE_NOTIFICATIONS_TABLE + " ( " + KEY_ROWID + " INTEGER PRIMARY" +
@@ -70,7 +74,8 @@ public class DatabaseHelper {
                             " TEXT NOT NULL, " +  KEY_READ_OR_NOT +
                             " INTEGER NOT NULL ,"+  "blogger_name" +
                             " TEXT NOT NULL ," +  KEY_IS_FAV_OR_NOT +
-                            " INTEGER NOT NULL "+" );"
+                            " INTEGER NOT NULL, "+ KEY_CONTENT_SHORT +
+                            " TEXT NOT NULL "+" );"
             );
 
             db.execSQL("CREATE TABLE " + DATABASE_BLOGGER_TABLE + " ( " + KEY_ROWID + " INTEGER PRIMARY" +
@@ -140,10 +145,21 @@ public class DatabaseHelper {
     }
 
     public long addPost(String blogId, int bloggerId, String content, String date , String title){
+        String str = content;
+        str = str.replaceAll("<a href(.*?)\\>","");
+        str = str.replaceAll("<img(.*?)\\>","");
+
+        str = Html.fromHtml(str).toString();
+        if (str.length() > 400) {
+            str =  str.substring(0, Math.min(str.length(), 400)) + "...";
+
+        }
+
         ContentValues cv = new ContentValues();
         cv.put(KEY_BLOG_ID, blogId);
         cv.put(KEY_BLOGGER_ID, bloggerId);
         cv.put(KEY_CONTENT, content);
+        cv.put(KEY_CONTENT_SHORT, str);
         cv.put(KEY_DATE, date);
         cv.put(KEY_TITLE, title);
         cv.put(KEY_READ_OR_NOT,0);
@@ -153,10 +169,20 @@ public class DatabaseHelper {
     }
 
     public long addNotifications(String blogId, int bloggerId, String content, String date , String title, String blogger_name){
+        String str = content;
+        str = str.replaceAll("<a href(.*?)\\>","");
+        str = str.replaceAll("<img(.*?)\\>","");
+
+        str = Html.fromHtml(str).toString();
+        if (str.length() > 400) {
+            str =  str.substring(0, Math.min(str.length(), 400)) + "...";
+
+        }
         ContentValues cv = new ContentValues();
         cv.put(KEY_BLOG_ID, blogId);
         cv.put(KEY_BLOGGER_ID, bloggerId);
         cv.put(KEY_CONTENT, content);
+        cv.put(KEY_CONTENT_SHORT, str);
         cv.put(KEY_DATE, date);
         cv.put(KEY_TITLE, title);
         cv.put("blogger_name",blogger_name);
@@ -167,10 +193,20 @@ public class DatabaseHelper {
     }
 
     public long addToReadLater(String blogId, int bloggerId, String content, String date , String title){
+        String str = content;
+        str = str.replaceAll("<a href(.*?)\\>","");
+        str = str.replaceAll("<img(.*?)\\>","");
+
+        str = Html.fromHtml(str).toString();
+        if (str.length() > 400) {
+            str =  str.substring(0, Math.min(str.length(), 400)) + "...";
+
+        }
         ContentValues cv = new ContentValues();
         cv.put(KEY_BLOG_ID, blogId);
         cv.put(KEY_BLOGGER_ID, bloggerId);
         cv.put(KEY_CONTENT, content);
+        cv.put(KEY_CONTENT_SHORT, str);
         cv.put(KEY_DATE, date);
         cv.put(KEY_TITLE, title);
         cv.put(KEY_READ_OR_NOT,0);
@@ -182,7 +218,7 @@ public class DatabaseHelper {
 
     public Cursor getAllData (int bloggerId) {
 
-        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT};
+        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT, KEY_CONTENT_SHORT};
         Cursor c = ourDatabase.query(DATABASE_TABLE, columns, KEY_BLOGGER_ID + " = " + bloggerId, null, null, null,  KEY_DATE + " DESC");
 
         return c;
@@ -190,7 +226,7 @@ public class DatabaseHelper {
 
     public Cursor getAllReadLater () {
 
-        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT};
+        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT, KEY_CONTENT_SHORT};
         Cursor c = ourDatabase.query(DATABASE_READ_LATER_TABLE, columns, null, null, null, null,  null);
 
         return c;
@@ -198,15 +234,15 @@ public class DatabaseHelper {
 
     public Cursor getAllFavourites () {
 
-        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT};
+        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, KEY_IS_FAV_OR_NOT,KEY_CONTENT_SHORT};
         Cursor c = ourDatabase.query(DATABASE_TABLE, columns, KEY_IS_FAV_OR_NOT + " = " + 1, null, null, null,  KEY_DATE + " DESC");
 
         return c;
     }
 
     public Cursor getAllNotifications () {
-        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, "blogger_name", KEY_IS_FAV_OR_NOT};
-        Cursor c = ourDatabase.query(DATABASE_NOTIFICATIONS_TABLE, columns, null, null, null, null,  KEY_DATE + " DESC LIMIT 20");
+        String[] columns = new String[] {KEY_ROWID, KEY_BLOG_ID, KEY_BLOGGER_ID, KEY_CONTENT, KEY_DATE, KEY_TITLE, KEY_READ_OR_NOT, "blogger_name", KEY_IS_FAV_OR_NOT,KEY_CONTENT_SHORT};
+        Cursor c = ourDatabase.query(DATABASE_NOTIFICATIONS_TABLE, columns, null, null, null, null,  KEY_DATE + " DESC");
         return c;
     }
 
@@ -261,6 +297,25 @@ public class DatabaseHelper {
 
     }
 
+    public String[] getBlogger(int blogId){
+        String[] columns = new String[] {KEY_ROWID, "blogger_name_en", "blogger_name_mal", "blog_name_en" ,
+                "blog_name_mal"};
+        String blogger_name_en = null;
+        String blogger_name_mal = null;
+        String blog_name_en = null;
+        String blog_name_mal = null;
+        Cursor c = ourDatabase.query(DATABASE_BLOGGER_TABLE, columns, KEY_ROWID + " = " + blogId, null, null, null,  null);
+
+        while (c.moveToNext()) {
+            blogger_name_en = c.getString(c.getColumnIndex("blogger_name_en"));
+            blogger_name_mal = c.getString(c.getColumnIndex("blogger_name_mal"));
+            blog_name_en = c.getString(c.getColumnIndex("blog_name_en"));
+            blog_name_mal = c.getString(c.getColumnIndex("blog_name_mal"));
+        }
+        String[] toBeReturned = {blogger_name_en, blogger_name_mal, blog_name_en, blog_name_mal};
+        return toBeReturned;
+    }
+
     public Void addToFavourites(String blogId, int value){
         // New value for one column
         ContentValues contentValues = new ContentValues();
@@ -274,22 +329,16 @@ public class DatabaseHelper {
         return null;
     }
 
-    public Void updatePostAsRead(String id){
-        // New value for one column
+    public Void updatePostAsRead(String blogId){
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_READ_OR_NOT, 1);
-        // Which row to update, based on the ID
-        String selection = KEY_BLOG_ID + " LIKE ?" ;
-        String[] selectionArgs = { id };
-        int count = ourDatabase.update(
-                DATABASE_TABLE,
-                contentValues,
-                selection,
-                selectionArgs);
-        Log.d("int count", Integer.toString(count));
-        Log.d("int id", id);
-
+        int count =ourDatabase.update(DATABASE_TABLE, contentValues, KEY_BLOG_ID+"='"+ blogId+"'", null);
+        Log.d("isFav", Integer.toString(count));
         return null;
+    }
+
+    public void markAsRead(String postId){
+        ourDatabase.delete(DATABASE_READ_LATER_TABLE, KEY_BLOG_ID + "='" + postId + "'", null);
     }
 
 

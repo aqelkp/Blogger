@@ -11,9 +11,9 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class BloggerCursorAdapter extends CursorAdapter {
+public class BloggerContactsAdapter extends CursorAdapter {
 
-    public BloggerCursorAdapter(Context context, Cursor c) {
+    public BloggerContactsAdapter(Context context, Cursor c) {
         super(context, c);
     }
 
@@ -63,7 +63,7 @@ public class BloggerCursorAdapter extends CursorAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PlaceHolderActivity.class);
+                Intent intent = new Intent(context, AboutBloggerActivity.class);
                 intent.putExtra("id", id);
                 intent.putExtra("blogger_name_en", bloggerNameEn);
                 intent.putExtra("blogger_name_mal", bloggerNameMal);

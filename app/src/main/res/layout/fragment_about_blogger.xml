@@ -25,24 +25,7 @@
             android:orientation="vertical"
             >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            tools:context="in.aqel.blogger.AboutBlogger"
-            android:paddingLeft="100dp"
-            android:paddingRight="100dp"
-            android:id="@+id/ll8">
-            <ImageView
-                android:layout_width="160dp"
-                android:layout_height="212dp"
-                android:id="@+id/imageView"
-                android:layout_gravity="center_horizontal|top"
-                android:background="@drawable/babuka"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
 
-                />
-        </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +35,7 @@
                 android:layout_gravity="center"
                 android:textStyle="bold"
                 android:textSize="25sp"
-                android:textColor="#ff7233ff" />
+                android:textColor="#c14a7a40" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/aboutMeMal"
-                    android:id="@+id/textView2"
+                    android:id="@+id/tvDescription"
                     android:padding="16dp"
                     android:lineSpacingExtra="4dp"
                     android:layout_gravity="center"
@@ -102,7 +85,228 @@
 
                 />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTACTS"
+                android:id="@+id/my_contact_list"
+                android:layout_gravity="left"
+                android:textColor="#777"
+                android:textStyle="italic"
+                android:textSize="18dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginBottom="4dp"
+                android:padding="12dp" />
+            <!-- TODO: Update blank fragment layout -->
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/subject"
+                android:padding="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:text="Feel free to contact me. Your feedbacks are source of ecouragement for me."
+                    android:id="@+id/about_main_messsage"
+                    android:padding="16dp"
+                    android:layout_gravity="center"
+                    android:singleLine="false"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="16dp"
+                    android:textColor="#222"
+                    />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#d3d7d9"
+                    />
+                <LinearLayout
+                    android:id="@+id/contact_call"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:background="@drawable/rate_on_play_store_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/call"
+                        android:layout_marginLeft="24dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvPhone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Call Me"
+                        android:textSize="14dp"
+                        android:textColor="#555"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#d3d7d9"
+                    />
+                <LinearLayout
+                    android:id="@+id/contact_message"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:background="@drawable/rate_on_play_store_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/whatsapp"
+                        android:layout_marginLeft="24dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvWhatsApp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="SMS / WhatsApp Me "
+                        android:textSize="14dp"
+                        android:textColor="#555"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#d3d7d9"
+                    />
+                <LinearLayout
+                    android:id="@+id/contact_facebook"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:background="@drawable/rate_on_play_store_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/facebook"
+                        android:layout_marginLeft="24dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvFacebook"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Facebook Me"
+                        android:textSize="14dp"
+                        android:textColor="#555"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#d3d7d9"
+                    />
+                <LinearLayout
+                    android:id="@+id/contact_google"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:background="@drawable/rate_on_play_store_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/gplus"
+                        android:layout_marginLeft="24dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvGoogleplus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Google+"
+                        android:textSize="14dp"
+                        android:textColor="#555"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="#d3d7d9"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/contact_email"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:onClick="onClick"
+                    android:background="@drawable/rate_on_play_store_bg"
+                    >
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="fill_parent"
+                        android:src="@drawable/gmail"
+                        android:layout_marginLeft="24dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvGmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Mail Me"
+                        android:textSize="14dp"
+                        android:paddingTop="12dp"
+                        android:textColor="#555"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
         </LinearLayout>
+
+
 
      </ScrollView>
 
