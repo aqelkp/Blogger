@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         card_view:cardElevation="3dp"
         card_view:contentPaddingTop="5dp"
+        android:background="#ffffff"
 
         >
 

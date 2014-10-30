@@ -84,8 +84,14 @@ public class PlaceHolderActivity extends ActionBarActivity {
             if (activeInfo != null && activeInfo.isConnected()) {
                 new getXMLAsync().execute( blog_url , Integer.toString(id));
             }else{
-                Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(this, "Connect to internet to download the blog.", Toast.LENGTH_SHORT).show();
+                ListView list = (ListView) findViewById(R.id.listView);
+                DatabaseHelper data = new DatabaseHelper(this);
+                data.open();
+                Cursor cur = data.getAllData(id);
+                CustomCursorAdapter customAdapter = new CustomCursorAdapter(this, cur);
+                list.setAdapter(customAdapter);
+                data.close();
             }
         }
 

@@ -71,6 +71,7 @@ public class DetailActivity extends ActionBarActivity {
         tvBlogName.setText(bloggerData[1]);
         ImageView image = (ImageView) findViewById(R.id.imageView);
         DataCollections datas = new DataCollections();
+
         int[] blogger_photos = datas.images();
         image.setImageResource(blogger_photos[bloggerId -1]);
         TextView tvDate = (TextView) findViewById(R.id.tvDate);

@@ -144,7 +144,7 @@ public class DatabaseHelper {
 
     }
 
-    public long addPost(String blogId, int bloggerId, String content, String date , String title){
+    public Void addPost(String blogId, int bloggerId, String content, String date , String title){
         String str = content;
         str = str.replaceAll("<a href(.*?)\\>","");
         str = str.replaceAll("<img(.*?)\\>","");
@@ -164,8 +164,8 @@ public class DatabaseHelper {
         cv.put(KEY_TITLE, title);
         cv.put(KEY_READ_OR_NOT,0);
         cv.put(KEY_IS_FAV_OR_NOT,0);
-        return ourDatabase.insert(DATABASE_TABLE, null, cv);
-
+       ourDatabase.insert(DATABASE_TABLE, null, cv);
+return null;
     }
 
     public long addNotifications(String blogId, int bloggerId, String content, String date , String title, String blogger_name){

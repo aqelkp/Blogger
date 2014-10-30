@@ -38,23 +38,49 @@ public class Notifications extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        SharedPreferences lastNotif = getActivity().getSharedPreferences("lastNotif", Context.MODE_PRIVATE);
+        int loadingFirst = lastNotif.getInt("loadingFirst", 0);
+        int parsedNotif = lastNotif.getInt("parsedNotif", 0);
+
         ListView list = (ListView) view.findViewById(R.id.listView);
+
+        if (loadingFirst == 0){
+            Log.d("Loaded", "Its first time");
+            DatabaseHelper data = new DatabaseHelper(getActivity());
+            data.open();
+            //(String blogId, int bloggerId, String content, String date , String title, String blogger_name
+            String[] blogId = DataCollections.blogId;
+            int[] bloggerId = DataCollections.bloggerId;
+            String[] content = DataCollections.content;
+            String[] date = DataCollections.date;
+            String[] title = DataCollections.title;
+            String[] blogger_name = DataCollections.blogger_name;
+            for (int i = 0; i < bloggerId.length;i++){
+                String contentString = Html.fromHtml(content[i]).toString();
+                data.addNotifications(blogId[i], bloggerId[i], contentString, date[i], title[i], blogger_name[i]);
+                data.addPost(blogId[i], bloggerId[i], contentString, date[i], title[i]);
+            }
+            data.close();
+            SharedPreferences.Editor editor = lastNotif.edit();
+            editor.putInt("loadingFirst", 1);
+            editor.commit();
+        }
+
+        if (parsedNotif == 0){
+
+            Log.d("No notif", "no");
+            new parseNotifications().execute();
+        }
         DatabaseHelper data = new DatabaseHelper(getActivity());
         data.open();
         Cursor cur = data.getAllNotifications();
-        Boolean loadedBefore = false;
         if (cur.getCount() != 0) {
             NotificationLIstAdapter customAdapter = new NotificationLIstAdapter(getActivity(), cur);
             //CustomCursorAdapter customAdapter = new CustomCursorAdapter(getActivity(), cur);
             list.setAdapter(customAdapter);
-            loadedBefore = true;
         }
         data.close();
-        if (!loadedBefore){
-            data.close();
-            new parseNotifications().execute();
-        }
-
         return view;
 
     }
@@ -75,6 +101,7 @@ public class Notifications extends Fragment {
         protected Void doInBackground(Void... voids) {
             final SharedPreferences lastNotif = getActivity().getSharedPreferences("lastNotif", Context.MODE_PRIVATE);
             final int notification_number = lastNotif.getInt("lastNotif",0);
+            final SharedPreferences.Editor editor = lastNotif.edit();
             ParseQuery<ParseObject> query;
             query = ParseQuery.getQuery("posts");
             query.whereGreaterThan("notification_number", notification_number);
@@ -84,27 +111,36 @@ public class Notifications extends Fragment {
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> userList, ParseException e) {
                     if (e == null) {
+                        editor.putInt("parsedNotif", 1);
+                        editor.commit();
                         Log.d("score", "Retrieved " + userList.size() + " posts");
                         DatabaseHelper data = new DatabaseHelper(getActivity());
-                        data.open();
+
                         int new_notif_num = notification_number;
                         for (int i=0; i<userList.size(); i++){
                             ParseObject parseList = userList.get(i);
-                            if (notification_number < parseList.getInt("notification_number")){
-                                new_notif_num = parseList.getInt("notification_number");
+                            try{
+                                data.open();
+                                if (notification_number < parseList.getInt("notification_number")){
+                                    new_notif_num = parseList.getInt("notification_number");
+                                }
+
+                                Log.d("notification Number", Integer.toString(parseList.getInt("notification_number")));
+                                String content  = Html.fromHtml(parseList.getString("content")).toString();
+                                Log.d("content", content);
+
+                                data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
+                                data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"));
+                                data.close();
+                            }catch (NullPointerException es){
+                                es.printStackTrace();
                             }
 
-                            Log.d("notification Number", Integer.toString(parseList.getInt("notification_number")));
-                            String content  = Html.fromHtml(parseList.getString("content")).toString();
-                            Log.d("content", content);
-
-                            data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
-                            data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"));
                         }
-                        SharedPreferences.Editor editor = lastNotif.edit();
+
                         editor.putInt("lastNotif", new_notif_num);
                         editor.commit();
-                        data.close();
+
                     } else {
                         Log.d("score", "Error: " + e.getMessage());
                     }
