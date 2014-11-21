@@ -17,6 +17,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -200,7 +202,7 @@
 
                 <android.support.v7.widget.CardView
                     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/card_view1"
+                    android:id="@+id/card_view21"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -515,7 +517,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#fff"
-                        android:text="Special thanks to Arun Padyan and Arun Jith for your valuable suggestions."
+                        android:text="Special thanks to Arun Padiyan for your valuable suggestions and help."
                         android:id="@+id/textView6"
                         android:padding="16dp"
                         android:layout_gravity="center"
@@ -527,6 +529,74 @@
                 </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:layout_gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    card_view:cardElevation="3dp"
+
+                    android:background="@android:color/white"
+                    >
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        android:onClick="onClick"
+                        android:id="@+id/about_malayalm_bloggers"
+                        >
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingLeft="15dp">
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="80dp"
+                                android:id="@+id/imageView32"
+                                android:background="@drawable/malayalam_bloggers_group1"
+                                android:layout_gravity="center_vertical"
+                                />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:layout_gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="#fff"
+                                android:text="Special thanks to Malayalam Bloggers facebook group for supporting us. Click to know more about them."
+                                android:padding="16dp"
+                                android:layout_gravity="center"
+                                android:singleLine="false"
+                                android:fontFamily="sans-serif-light"
+                                android:textSize="16dp"
+                                android:textColor="#222"
+                                />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="7dp"
+                >
 
             </LinearLayout>
 

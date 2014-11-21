@@ -87,14 +87,16 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[6];
+        ObjectDrawerItem[] drawerItem = new ObjectDrawerItem[8];
 
         drawerItem[0] = new ObjectDrawerItem(R.drawable.nav_home, "Home");
         drawerItem[1] = new ObjectDrawerItem(R.drawable.nav_bloggers, "Bloggers");
         drawerItem[2] = new ObjectDrawerItem(R.drawable.nav_fav, "Favourties");
-        drawerItem[3] = new ObjectDrawerItem(R.drawable.nav_read_later, "Read Later");
+        drawerItem[3] = new ObjectDrawerItem(R.drawable.nav_read_later, "My Bloggers");
         drawerItem[4] = new ObjectDrawerItem(R.drawable.nav_abt_blogger, "About Bloggers");
-        drawerItem[5] = new ObjectDrawerItem(R.drawable.nav_abt_us, "About Us");
+        drawerItem[7] = new ObjectDrawerItem(R.drawable.nav_abt_us, "About Us");
+        drawerItem[5] = new ObjectDrawerItem(R.drawable.nav_paper, "Newspapers");
+        drawerItem[6] = new ObjectDrawerItem(R.drawable.nav_book, "Books");
 
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);

@@ -80,6 +80,12 @@ public class CustomCursorAdapter extends CursorAdapter {
         catch (ParseException e) {
             e.printStackTrace();
         }
+        catch (StringIndexOutOfBoundsException s){
+            s.printStackTrace();
+        }
+        catch (NullPointerException k){
+            k.printStackTrace();
+        }
 
         date.setText(dateString);
 
@@ -93,8 +99,10 @@ public class CustomCursorAdapter extends CursorAdapter {
         final String strTitle = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(5)));
         //final int postId = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(0)));
         final int id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(0)));
+
         final int blogger_id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(2)));
         final String postId = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(1)));
+        final String link = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(9)));
         final String timeStamp = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(4)));
 
         //final int postId = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(0)));
@@ -112,6 +120,7 @@ public class CustomCursorAdapter extends CursorAdapter {
                 intent.putExtra("blogger_id", blogger_id);
                 intent.putExtra("isFav", isFav);
                 intent.putExtra("activityBefore", "blogglist");
+                intent.putExtra("link", link);
                 context.startActivity(intent);
             }
         });

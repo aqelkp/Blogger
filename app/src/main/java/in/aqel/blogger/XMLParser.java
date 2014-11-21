@@ -57,9 +57,7 @@ public class XMLParser {
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity httpEntity = httpResponse.getEntity();
 			xml = EntityUtils.toString(httpEntity);
-            if (xml.equals(null)){
-                xml = "sorry";
-            }
+
 
 
 		} catch (UnsupportedEncodingException e) {
@@ -122,4 +120,12 @@ public class XMLParser {
 			return this.getElementValue(n.item(0));
 
         }
+
+    public String getLink(Element item){
+        NodeList n = item.getElementsByTagName("link");
+        Element el = (Element) n.item(4);
+        String link = el.getAttribute("href");
+        Log.d("link", link);
+        return link;
+    }
 }

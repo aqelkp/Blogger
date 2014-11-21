@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="in.aqel.blogger.BookSellers"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:gravity="center_horizontal"
+    >
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView" >
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="14dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Click on the images to buy books online"
+                android:id="@+id/textView"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="10dp" />
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="3dp"
+                android:background="#ffffff"
+                >
+            <ImageButton
+                android:id="@+id/ib1"
+                android:src="@drawable/book_induleka"
+                android:paddingBottom="3dp"
+                android:layout_width="300dp"
+                android:layout_height="75dp"
+                android:background="#ffffff"
+                android:elevation="10dp"
+                />
+            </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="3dp"
+                android:background="#ffffff"
+                >
+            <ImageButton
+                android:id="@+id/ib2"
+                android:src="@drawable/book_dc"
+                android:paddingBottom="3dp"
+                android:layout_width="300dp"
+                android:layout_height="75dp"
+                android:background="#ffffff"
+                android:elevation="10dp"
+                />
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="3dp"
+                android:background="#ffffff"
+                >
+            <ImageButton
+                android:id="@+id/ib3"
+                android:src="@drawable/book_kerala"
+                android:paddingBottom="3dp"
+                android:layout_width="300dp"
+                android:layout_height="75dp"
+                android:background="#ffffff"
+                android:elevation="10dp"
+                />
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardElevation="3dp"
+                android:background="#ffffff"
+                >
+            <ImageButton
+            android:id="@+id/ib4"
+                android:src="@drawable/books_mathr"
+            android:paddingBottom="3dp"
+            android:layout_width="300dp"
+            android:layout_height="75dp"
+            android:background="#ffffff"
+            android:elevation="10dp"
+            />
+            </android.support.v7.widget.CardView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+       </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

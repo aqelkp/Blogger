@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,8 @@ public class BloggerCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
-        int blogger_photos[] = {R.drawable.blogger_photo_1, R.drawable.blogger_photo_2, R.drawable.blogger_photo_3};
+        int blogger_photos[] = DataCollections_bloggers.blogger_photos;
+                //{R.drawable.blogger_photo_1, R.drawable.blogger_photo_2, R.drawable.blogger_photo_3};
 
 
 
@@ -48,7 +50,6 @@ public class BloggerCursorAdapter extends CursorAdapter {
         final String bloggerNameEn = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(1)));
         final String bloggerNameMal = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(2)));
         final String blogNameEn = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(3)));
-        //String blogNameMal = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(4)));
         final String description = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(5)));
         final String phoneNumber = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(6)));
         final String gmail = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(7)));
@@ -57,9 +58,16 @@ public class BloggerCursorAdapter extends CursorAdapter {
         final int weight = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(10)));
         final Boolean loadedOrNot = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(11)))>0;
         final String blogUrl = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(12)));
+        final int isFav = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(13)));
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        image.setImageResource(blogger_photos[id -1]);
+        int numBloggers = DataCollections_bloggers.bloggerNameEn.length;
+        if (id>numBloggers){
+            image.setImageResource(R.drawable.blooger_photo_gen);
+        }else{
+            image.setImageResource(blogger_photos[id -1]);
+        }
+        Log.d("LogAq Blogger List", Integer.toString(id) + " "+ bloggerNameEn );
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,6 +85,8 @@ public class BloggerCursorAdapter extends CursorAdapter {
                 intent.putExtra("weight", weight);
                 intent.putExtra("loadedOrNot", loadedOrNot);
                 intent.putExtra("blog_url", blogUrl);
+                intent.putExtra("isFav", isFav);
+                intent.putExtra("previous", "bloggers");
                 context.startActivity(intent);
 
             }

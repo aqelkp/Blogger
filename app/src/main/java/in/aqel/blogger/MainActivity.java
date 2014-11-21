@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -47,9 +48,36 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        Bundle extras = getIntent().getExtras();
+            try {
+                String previous = extras.getString("previous");
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                Log.d("LogAq Previous ", previous);
+                if (previous.equals("placeHolder")){
+                        Fragment fragmentBloggerList = new BloggersList();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, fragmentBloggerList).commit();
+                        setTitle("Bloggers");
+                } else if (previous.equals("myBloggers")){
+                        Fragment fragmentReadLater = new MyBloggers();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, fragmentReadLater).commit();
+                        setTitle("My Bloggers");
+                } else if (previous.equals("newspaper")){
+                    Fragment fragmentNewsPapers = new NewsPapers();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, fragmentNewsPapers).commit();
+                    setTitle("News Papers");
+                } else if (previous.equals("notifications")){
+                    Fragment fragmentHome = new Notifications();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, fragmentHome).commit();
+                    setTitle("Home");
+                }
 
+            } catch (NullPointerException e) {
 
-
+            }
     }
 
     @Override
@@ -77,11 +105,17 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, fragmentContacts).commit();
                 setTitle("Contact Me");
                 break;*/
-            case 5:
+            case 6:
+                Fragment fragmentBooks = new BookSellers();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragmentBooks).commit();
+                setTitle("Books");
+                break;
+            case 7:
                 Fragment fragmentAboutAqel = new AboutAqelFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragmentAboutAqel).commit();
-                setTitle("Aqel Ahammad");
+                setTitle("About Us");
                 break;
             case 2:
                 Fragment fragmentFavourites = new FavouritesFragment();
@@ -90,10 +124,10 @@ public class MainActivity extends ActionBarActivity
                 setTitle("Favourites");
                 break;
             case 3:
-                Fragment fragmentReadLater = new ReadLaterFragment();
+                Fragment fragmentReadLater = new MyBloggers();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragmentReadLater).commit();
-                setTitle("Read Later");
+                setTitle("My Bloggers");
                 break;
             case 1:
                 Fragment fragmentBloggerList = new BloggersList();
@@ -101,12 +135,18 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, fragmentBloggerList).commit();
                 setTitle("Bloggers");
                 break;
+            case 5:
+                Fragment fragmentNewsPapers = new NewsPapers();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragmentNewsPapers).commit();
+                setTitle("News Papers");
+                break;
 
         }
     }
 
     public void onSectionAttached(int number) {
-        switch (number) {
+        /*switch (number) {
             case 1:
                 mTitle = "Home";
 
@@ -119,7 +159,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section3);
                 break;
 
-        }
+        }*/
     }
 
     public void restoreActionBar() {
@@ -133,6 +173,11 @@ public class MainActivity extends ActionBarActivity
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
+            case R.id.about_malayalm_bloggers:
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse("http://mazhavillumagazine.blogspot.com/"));
+                startActivity(i);
+                break;
             case R.id.contact_call:
                 Intent callIntent = new Intent(android.content.Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + "+966 50 657 7642"));

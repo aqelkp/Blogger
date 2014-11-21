@@ -12,4 +12,6 @@
     <color name="actionbar_background">#ff5c7b00</color>
     <color name="actionbar_background_temp">#93c700</color>
     <color name="drawer_background">#c14a7a40</color>
+    <color name="white">#ffffffff</color>
+    <color name="not_read">#f1f1f1</color>
 </resources>

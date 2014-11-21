@@ -7,13 +7,15 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class AboutBloggerActivity extends ActionBarActivity {
-    String blogger_name_mal, description, phone_number, email, google_plus, facebook,blogger_name_en;
+    String blogger_name_mal, description, phone_number, email, google_plus, facebook,blogger_name_en, blog_url;
     int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,7 @@ public class AboutBloggerActivity extends ActionBarActivity {
          */
         setContentView(R.layout.fragment_about_blogger);
 
-        DataCollections collectionData = new DataCollections();
-        int images[] = collectionData.images();
+        int images[] = DataCollections_bloggers.blogger_photos;
         Bundle extras = getIntent().getExtras();
          id = extras.getInt("id");
          blogger_name_mal= extras.getString("blogger_name_mal");
@@ -46,6 +47,7 @@ public class AboutBloggerActivity extends ActionBarActivity {
          email = extras.getString("email");
          google_plus = extras.getString("google_plus");
          facebook = extras.getString("facebook");
+        blog_url = extras.getString("blog_url");
         getSupportActionBar().setTitle("About " + blogger_name_en);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         TextView Name = (TextView) findViewById(R.id.tvName);
@@ -56,12 +58,26 @@ public class AboutBloggerActivity extends ActionBarActivity {
 
         Name.setText(blogger_name_mal);
         AboutMe.setText(description);
-
+        Log.d("null phone number", phone_number);
+        if (phone_number.equals("null")){
+            Log.d("null", "phone is null");
+            LinearLayout callMe = (LinearLayout) findViewById(R.id.contact_call);
+            callMe.getLayoutParams().height = 0;
+            LinearLayout sms = (LinearLayout) findViewById(R.id.contact_message);
+            sms.getLayoutParams().height = 0;
+        }
 
     }
 
+
+
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.cardVisitPage:
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(blog_url));
+                startActivity(i);
+                break;
             case R.id.contact_call:
                 Intent callIntent = new Intent(android.content.Intent.ACTION_CALL);
                 callIntent.setData(Uri.parse("tel:" + phone_number));

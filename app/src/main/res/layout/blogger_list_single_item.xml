@@ -36,12 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
-            android:padding="10dp">
+            android:padding="6dp">
             <ImageView
                 android:layout_width="72dp"
                 android:layout_height="70dp"
                 android:id="@+id/imageView"
-                android:background="@drawable/blogger_photo_1"
+                android:background="@drawable/blooger_photo_1"
                 android:layout_gravity="center_vertical"
                 />
             </LinearLayout>
@@ -49,10 +49,10 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             android:layout_gravity="center_vertical">
 
 

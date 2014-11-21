@@ -29,7 +29,7 @@ public class BloggerContactsAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, final Context context, final Cursor cursor) {
-        int blogger_photos[] = {R.drawable.blogger_photo_1, R.drawable.blogger_photo_2, R.drawable.blogger_photo_3};
+        int blogger_photos[] = DataCollections_bloggers.blogger_photos;
 
 
 
@@ -59,7 +59,12 @@ public class BloggerContactsAdapter extends CursorAdapter {
         final String blogUrl = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(12)));
 
         ImageView image = (ImageView) view.findViewById(R.id.imageView);
-        image.setImageResource(blogger_photos[id -1]);
+        int numBloggers = DataCollections_bloggers.bloggerNameEn.length;
+        if (id>numBloggers){
+            image.setImageResource(R.drawable.blooger_photo_gen);
+        }else{
+            image.setImageResource(blogger_photos[id -1]);
+        }
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,9 +83,7 @@ public class BloggerContactsAdapter extends CursorAdapter {
                 intent.putExtra("loadedOrNot", loadedOrNot);
                 intent.putExtra("blog_url", blogUrl);
                 context.startActivity(intent);
-
             }
         });
-
     }
 }

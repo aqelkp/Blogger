@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,10 +16,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import java.util.List;
 
@@ -31,7 +26,6 @@ public class PushReciever extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new parseNotifications().execute();
-        //new getXMLAsync().execute();
         setContentView(R.layout.activity_push_reciever);
     }
 
@@ -49,45 +43,58 @@ public class PushReciever extends Activity {
         }
         @Override
         protected Void doInBackground(Void... voids) {
-            final SharedPreferences lastNotif = getSharedPreferences("lastNotif", Context.MODE_PRIVATE);
-            final int notification_number = lastNotif.getInt("lastNotif",0);
+            ConnectivityManager connMgr =
+                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+            if (activeInfo != null && activeInfo.isConnected()) {
+                parseNotifications();
+            }else {
+                    Toast.makeText(PushReciever.this, "Check internet connection", Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+        private void parseNotifications() {
+            final SharedPreferences lastParsedNotif = getSharedPreferences("lastParsedNotif", Context.MODE_PRIVATE);
+            int notifications_already_saved = DataCollections_posts.bloggerId.length;
+            final int notification_number = lastParsedNotif.getInt("lastParsedNotifNumber", notifications_already_saved);
             ParseQuery<ParseObject> query;
-            query = ParseQuery.getQuery("posts");
+            query = ParseQuery.getQuery("notifications");
             query.whereGreaterThan("notification_number", notification_number);
+            final DatabaseHelper data = new DatabaseHelper(PushReciever.this);
+
             query.setLimit(20);
-            // Sorts the results in descending order by the score field
-            query.orderByDescending("date");
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> userList, ParseException e) {
                     if (e == null) {
-                        Log.d("score", "Retrieved " + userList.size() + " posts");
-                        DatabaseHelper data = new DatabaseHelper(PushReciever.this);
-                        data.open();
-                        int new_notif_num = notification_number;
-                        for (int i=0; i<userList.size(); i++){
-                            ParseObject parseList = userList.get(i);
-                            if (notification_number < parseList.getInt("notification_number")){
-                                new_notif_num = parseList.getInt("notification_number");
-                            }
+                        try{
+                            int new_notif_num = notification_number;
+                            for (int i = 0; i < userList.size(); i++){
+                                ParseObject parseList = userList.get(i);
+                                Log.d("score", "Retrieved " + userList.size() + " posts");
+                                data.open();
+                                if (new_notif_num < parseList.getInt("notification_number")){
+                                    new_notif_num = parseList.getInt("notification_number");
+                                }
+                                // int bloggerId,  String date , String title, String blogger_name, String categ, String blogName
+                                Log.d("notification Number", Integer.toString(parseList.getInt("notification_number")));
 
-                            Log.d("notification Number", Integer.toString(parseList.getInt("notification_number")));
-                            String content  = Html.fromHtml(parseList.getString("content")).toString();
-                            data.addNotifications(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name"));
-                            data.addPost(parseList.getString("post_id"), parseList.getInt("blog_id"), content, parseList.getString("date"), parseList.getString("title"));
+                                data.addNotifications(parseList.getInt("notification_number"),parseList.getInt("blogger_id"), parseList.getString("date"), parseList.getString("title"), parseList.getString("blogger_name_eng"),parseList.getString("category"), parseList.getString("blog_name_eng"));
+                                data.close();
+                            }
+                            SharedPreferences.Editor editor = lastParsedNotif.edit();
+                            editor.putInt("lastParsedNotifNumber", new_notif_num);
+                            editor.putLong("lastParsedNotif_time", System.currentTimeMillis());
+                            editor.commit();
+                        }catch (NullPointerException es){
+                            es.printStackTrace();
                         }
-                        SharedPreferences.Editor editor = lastNotif.edit();
-                        editor.putInt("lastNotif", new_notif_num);
-                        editor.commit();
-                        data.close();
                     } else {
                         Log.d("score", "Error: " + e.getMessage());
                     }
                 }
             });
-
-            return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
@@ -99,90 +106,5 @@ public class PushReciever extends Activity {
         }
     }
 
-    public class getXMLAsync extends AsyncTask<Void, Void, Void> {
-        static final String URL = "http://oorkkadavu.blogspot.com/feeds/posts/default";
-        // XML node keys
-        static final String KEY_ITEM = "entry"; // parent node
-        static final String KEY_ID = "id";
-        static final String KEY_TITLE = "title";
-        static final String KEY_CONTENT = "content";
-        static final String KEY_DATE = "published";
-        SharedPreferences xmlStore;
-        String[] id, title, content, date;
-        StringFormatter converter = new StringFormatter();
-        private ProgressDialog pDialog;
-        DatabaseHelper data = new DatabaseHelper(PushReciever.this);
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pDialog = new ProgressDialog(PushReciever.this);
-            pDialog.setMessage("Updating");
-            pDialog.setIndeterminate(false);
-            pDialog.setCancelable(false);
-            pDialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            XMLParser parser = new XMLParser();
-            String xml = null;
-
-            ConnectivityManager connMgr =
-                    (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-            NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
-            SharedPreferences xmlStore = getSharedPreferences("xmlStore", Context.MODE_PRIVATE);
-
-            if (activeInfo != null && activeInfo.isConnected()) {
-                xml = parser.getXmlFromUrl(URL);
-                Log.d("xml", xml);
-                SharedPreferences.Editor editor = xmlStore.edit();
-                editor.putString("xml", xml);
-                editor.putInt("loadedInt", 1);
-                editor.commit();
-                Document doc = parser.getDomElement(xml); // getting DOM element
-                NodeList nl = doc.getElementsByTagName(KEY_ITEM);
-                // looping through all item nodes <item>
-
-                id = new String[nl.getLength()];
-                title = new String[nl.getLength()];
-                content = new String[nl.getLength()];
-                date = new String[nl.getLength()];
-
-                data.open();
-
-                for (int i = 0; i < nl.getLength(); i++) {
-                    Element e = (Element) nl.item(i);
-                    id[i] = parser.getValue(e, KEY_ID);
-                    String titleString = converter.ConvertToMalayalam(parser.getValue(e, KEY_TITLE));
-                    title[i] = titleString;
-                    String contentString = parser.getValue(e, KEY_CONTENT);
-                    content[i] = contentString;
-                    date[i] = parser.getValue(e, KEY_DATE);
-                    data.addPost(id[i],1, content[i], date[i], title[i]);
-                }
-                data.close();
-            } else {
-                Toast.makeText(PushReciever.this, "Check your internet connection", Toast.LENGTH_SHORT).show();
-            }
-
-
-            Log.d("reached", "here");
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            pDialog.dismiss();
-            Intent intent = new Intent(PushReciever.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent);
-            super.onPostExecute(aVoid);
-        }
-
-
-    }
 }

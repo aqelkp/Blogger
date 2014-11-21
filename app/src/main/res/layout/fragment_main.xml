@@ -8,11 +8,21 @@
     tools:context="in.aqel.blogger.MainActivity$PlaceholderFragment"
     android:padding="8dp"
     >
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardElevation="3dp"
+        card_view:contentPaddingTop="5dp"
+        android:background="#ffffff"
+
+        >
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/subject"
 
         >
 
@@ -28,9 +38,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:padding="2dp"
 
-                >
+                android:paddingLeft="10dp"
+
+                android:paddingTop="2dp"
+                android:paddingRight="3dp"
+                android:paddingBottom="2dp">
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
@@ -74,6 +87,7 @@
 
 
     </LinearLayout>
+    </android.support.v7.widget.CardView>
 
     <ListView
         android:layout_width="wrap_content"

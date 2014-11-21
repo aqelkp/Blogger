@@ -15,9 +15,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class NotificationLIstAdapter extends CursorAdapter {
+public class NotificationLIstAdapter_old extends CursorAdapter {
 
-    public NotificationLIstAdapter(Context context, Cursor c) {
+    public NotificationLIstAdapter_old(Context context, Cursor c) {
         super(context, c);
     }
 
@@ -45,6 +45,7 @@ public class NotificationLIstAdapter extends CursorAdapter {
         final int id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(0)));
         final int blogger_id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(2)));
         final String timeStamp = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(4)));
+        final String link = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(10)));
         final int isFav = cursor.getInt(cursor.getColumnIndex("isFav"));
 
         Typeface font = Typeface.createFromAsset(context.getAssets(), "karthika.TTF");
@@ -112,6 +113,7 @@ public class NotificationLIstAdapter extends CursorAdapter {
                 intent.putExtra("dateStamp", timeStamp);
                 intent.putExtra("postId", postId);
                 intent.putExtra("isFav", isFav);
+                intent.putExtra("link", link);
                 intent.putExtra("blogger_id", blogger_id);
                 intent.putExtra("activityBefore", "notifications");
                 context.startActivity(intent);

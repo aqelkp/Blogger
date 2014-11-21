@@ -1,6 +1,7 @@
 package in.aqel.blogger;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,9 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -25,7 +28,7 @@ import com.google.android.gms.ads.AdView;
 public class DetailActivity extends ActionBarActivity {
 
     int isFav, bloggerId;
-    String blogId,  title, content, dateString, activityBefore, timeStamp;
+    String blogId,  title, content, dateString, activityBefore, timeStamp, link;
 
 
     @Override
@@ -52,7 +55,8 @@ public class DetailActivity extends ActionBarActivity {
         content= extras.getString("content");
         bloggerId = extras.getInt("blogger_id");
         blogId = extras.getString("postId");
-
+        Log.d("Blogger id", Integer.toString(bloggerId));
+        link = extras.getString("link");
         DatabaseHelper data = new DatabaseHelper(DetailActivity.this);
         data.open();
         //blogId = extras.getInt("id");
@@ -70,10 +74,13 @@ public class DetailActivity extends ActionBarActivity {
         tvBloggerName.setText(bloggerData[3]);
         tvBlogName.setText(bloggerData[1]);
         ImageView image = (ImageView) findViewById(R.id.imageView);
-        DataCollections datas = new DataCollections();
-
-        int[] blogger_photos = datas.images();
-        image.setImageResource(blogger_photos[bloggerId -1]);
+        int[] blogger_photos = DataCollections_bloggers.blogger_photos;
+        int numBloggers = DataCollections_bloggers.bloggerNameEn.length;
+        if (bloggerId>numBloggers){
+            image.setImageResource(R.drawable.blooger_photo_gen);
+        }else{
+            image.setImageResource(blogger_photos[bloggerId -1]);
+        }
         TextView tvDate = (TextView) findViewById(R.id.tvDate);
         //TextView tvContent = (TextView) findViewById(R.id.tvContent);
         TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
@@ -84,11 +91,12 @@ public class DetailActivity extends ActionBarActivity {
 
         //tvContent.setText(extras.getString("content"));
         WebView webview = (WebView) findViewById(R.id.wvContent);
+
         String htmlContent = "  <style type=\"text/css\"> \n" +
                 "   @font-face { \n" +
                 "       font-family: MyFont; \n" +
                 "       src: url(\"file:///android_asset/karthika.TTF\") \n" +
-                "   } \n" +
+                "   } img{display: inline; height: auto; max-width: 90%;} " +
                 "   body { \n" +
                 "       font-family: MyFont; \n" +
             //    "       font-size: 18px; \n" +
@@ -96,10 +104,31 @@ public class DetailActivity extends ActionBarActivity {
                 "   } \n" +
                 "  </style> \n" + extras.getString("content");
         webview.loadDataWithBaseURL("file:///android_asset/", htmlContent , "text/html", "UTF-8", "null" );
-        //DatabaseHelper data  = new DatabaseHelper(this);
-        //data.open();
-        //data.updatePostAsRead(extras.getString("id"));
-        //data.close();
+        Button bViewComplete = (Button) findViewById(R.id.bComments);
+        bViewComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ConnectivityManager connMgr =
+                        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+                NetworkInfo activeInfo = connMgr.getActiveNetworkInfo();
+                if (activeInfo != null && activeInfo.isConnected()) {
+                    Intent intent = new Intent (DetailActivity.this, ViewCompletePost.class);
+                    intent.putExtra("link", link);
+                    intent.putExtra("dateStamp", timeStamp);
+                    intent.putExtra("date", dateString);
+                    intent.putExtra("title", title);
+                    intent.putExtra("content", content);
+                    intent.putExtra("bloggerId", bloggerId);
+                    intent.putExtra("blogId", blogId);
+                    intent.putExtra("isFav", isFav);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(DetailActivity.this, "Connect to internet to view comments.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
 
@@ -146,19 +175,6 @@ public class DetailActivity extends ActionBarActivity {
                 Log.d("isFav Saved", Integer.toString(isFav));
             }
             return true;
-        }else if(id== R.id.action_read_later){
-
-            if (activityBefore.equals("readLater")){
-                DatabaseHelper data = new DatabaseHelper(DetailActivity.this);
-                data.open();
-                data.markAsRead(blogId);
-                data.close();
-            }else{
-                DatabaseHelper data = new DatabaseHelper(DetailActivity.this);
-                data.open();
-                data.addToReadLater(blogId, bloggerId, content, timeStamp, title);
-                data.close();
-            }
         }
         return super.onOptionsItemSelected(item);
     }

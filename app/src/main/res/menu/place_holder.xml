@@ -2,5 +2,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="in.aqel.blogger.PlaceHolderActivity" >
-
+    <item android:id="@+id/action_refresh"
+        android:title="Refresh"
+        android:orderInCategory="90"
+        android:icon="@android:drawable/ic_popup_sync"
+        app:showAsAction="always" />
+    <item android:id="@+id/action_addToFav"
+        android:title="Add to My Bloggers"
+        android:orderInCategory="80"
+        app:showAsAction="ifRoom" />
 </menu>

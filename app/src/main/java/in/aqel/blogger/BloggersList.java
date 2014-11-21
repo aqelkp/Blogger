@@ -3,21 +3,48 @@ package in.aqel.blogger;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-/**
- * A placeholder fragment containing a simple view.
- */
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.List;
+
 public class BloggersList extends Fragment {
 
     public BloggersList() {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuId = item.getItemId();
+        Log.d("LogAq Id of item", Integer.toString(menuId));
+        switch (menuId){
+            case R.id.action_refresh_bloggers:
+                new parseBloggers().execute();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        getActivity().getMenuInflater().inflate(R.menu.home, menu);
     }
 
     @Override
@@ -28,7 +55,14 @@ public class BloggersList extends Fragment {
 
 
         SharedPreferences firstLogin = getActivity().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
-        if (!firstLogin.getBoolean("LoadedOrNot", false)) {
+        String versionName;
+        try {
+            versionName = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            versionName = getActivity().getResources().getString(R.string.version_name);
+            e.printStackTrace();
+        }
+        if (!firstLogin.getBoolean("LoadedOrNot" + versionName, false)) {
             new storeBloggerDetails().execute();
         } else {
 
@@ -38,14 +72,20 @@ public class BloggersList extends Fragment {
             Cursor cur = data.getAllBloggers();
             if (cur != null) {
                 BloggerCursorAdapter customAdapter = new BloggerCursorAdapter(getActivity(), cur);
-                for (cur.moveToLast(); !cur.isBeforeFirst(); cur.moveToPrevious()) {
 
-                }
                 list.setAdapter(customAdapter);
             }
             data.close();
 
 
+
+        }
+        int halfMonth = 1000*60*60*24*15;
+        final SharedPreferences bloggersNum = getActivity().getSharedPreferences("bloggersNum", Context.MODE_PRIVATE);
+        Long lastBloggersParsedTime = bloggersNum.getLong("lastBloggersParsedTime", 0);
+        if (System.currentTimeMillis() > lastBloggersParsedTime + halfMonth){
+            //new parseBloggersInBackground().execute();
+            new parseBloggers().execute();
         }
         return rootView;
     }
@@ -53,20 +93,18 @@ public class BloggersList extends Fragment {
 
     public class storeBloggerDetails extends AsyncTask<Void, Void,Void>{
         private ProgressDialog pDialog;
-        String bloggerNameEn[] = {"Basheer Vallikunnu","Faisal Babu", "Akbar Ali"};
-        String bloggerNameMal[]= {"ബഷീർ വള്ളിക്കുന്ന്", "ഫൈസൽ ബാബു", "അക്ബർ അലി "};
-        String blogNameEn[] = {"Vallikunnu", "Oorkadavu", "Chaliyar"};
-        String blogNameMal[] = {"വള്ളിക്കുന്ന്", "ഊർക്കടവ് ", "ചാലിയാർ"};
-        String description[] = {"സീരിയസ്സായി പറഞ്ഞാല്‍ സൗമ്യനും സല്‍സ്വഭാവിയും സുന്ദരനുമായ ചെറുപ്പക്കാരന്‍ , ഡീസന്റ് പാര്‍ട്ടി. :)",
-                "എന്നെക്കുറിച്ച് ഞാനെന്ത് പറഞ്ഞാലും നിങ്ങള്‍ പറയും, \"അവന്റെയൊരു പൊങ്ങച്ചം\" എന്ന് . വല്ലതും പറയാതിരുന്നാലോ?, \"അവന്റെയൊരു ജാഡ\" എന്നും... എന്ത് തോന്നിയാലും ഞാന്‍ ‍പറയാം, ജീവിതത്തിന്‍റെ രണ്ടറ്റവും കൂട്ടിമുട്ടിക്കാന്‍ പ്രവാസ ജീവിതം നയിക്കുന്ന അനേകരില്‍ ഒരാളായി സൗദിയിലെ കുന്‍ഫുദ എന്ന കൊച്ചു പട്ടണത്തില്‍ പ്രവാസിയായി ഞാനും ......",
-                "മലപ്പുറം കോഴിക്കോട് ജില്ലകള്‍ അതിര്‍ത്തി പങ്കിടുന്ന ചാലിയാര്‍ തീരത്ത്, ഹരിത മനോഹരമായ ഒരു വാഴക്കാടന്‍ ഉള്‍ഗ്രാമത്തില്‍ ജനനം. കളിച്ചും ചിരിച്ചും അല്ലലില്ലാതെ വളര്‍ന്ന ബാല്യ കൗമാരങ്ങള്‍ക്കുമേൽ ജീവിത യാഥാര്‍ത്ഥ്യങ്ങളുടെ ഉഷ്ണക്കാറ്റ് വീശിത്തുടങ്ങിയപ്പോള്‍ പ്രവാസത്തിന്റെ യാന്ത്രിക ജീവിതത്തിലേക്ക് വഴുതിപ്പോയ യൗവ്വനം. ഇപ്പോള്‍ സൗദി അറേബ്യയില്‍ ജീവിതത്തിന്‍റെ ഭാഗധേയം തേടി പ്രവാസം തുടരുന്നു. "
-        };
-        String phoneNumber[] = {"+966 50 255 9726","+966506577642","+966508636322"};
-        String gmail[] = {"vallikkunnu@gmail.com", "faisalbabuk@gmail.com","akbar.ali.3538@facebook.com"};
-        String googlePlus[] = {"115687498578590743703","114428535690141984682", "103805942713504922361"};
-        String facebookId[] = { "vallikkunnu" ,"faisal.babu.7374","akbar.ali.3538"};
-        int weight[] = {90,80,75};
-        String blogUrl[] = {"http://www.vallikkunnu.com", "http://oorkkadavu.blogspot.in", "http://chaliyaarpuzha.blogspot.in"};
+        String bloggerNameEn[] = DataCollections_bloggers.bloggerNameEn;
+        String bloggerNameMal[]= DataCollections_bloggers.bloggerNameMal;
+        String blogNameEn[] = DataCollections_bloggers.blogNameEn;
+        String blogNameMal[] = DataCollections_bloggers.blogNameMal;
+        String description[] = DataCollections_bloggers.description;
+        String phoneNumber[] = DataCollections_bloggers.phoneNumber;
+        String gmail[] = DataCollections_bloggers.gmail;
+        String googlePlus[] = DataCollections_bloggers.googlePlus;
+        String facebookId[] = DataCollections_bloggers.facebookId;
+        int weight[] = DataCollections_bloggers.weight;
+        int bloggersId[] = DataCollections_bloggers.bloggerId;
+        String blogUrl[] = DataCollections_bloggers.blogUrl;
 
         @Override
         protected void onPreExecute() {
@@ -83,13 +121,20 @@ public class BloggersList extends Fragment {
             DatabaseHelper data= new DatabaseHelper(getActivity());
             data.open();
             for (int i = 0; i < bloggerNameEn.length; i++){
-                data.addBlogger(bloggerNameEn[i], bloggerNameMal[i], blogNameEn[i], blogNameMal[i], description[i], phoneNumber[i], gmail[i],
+                data.addBlogger( bloggersId[i],bloggerNameEn[i], bloggerNameMal[i], blogNameEn[i], blogNameMal[i], description[i], phoneNumber[i], gmail[i],
                         googlePlus[i], facebookId[i], weight[i], 0 ,blogUrl[i]);
             }
             data.close();
+            String versionName;
+            try {
+                versionName = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                versionName = getActivity().getResources().getString(R.string.version_name);
+                e.printStackTrace();
+            }
             SharedPreferences firstLogin = getActivity().getSharedPreferences("userDetails", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = firstLogin.edit();
-            editor.putBoolean("LoadedOrNot", true);
+            editor.putBoolean("LoadedOrNot" + versionName, true);
             editor.commit();
             return null;
         }
@@ -111,5 +156,162 @@ public class BloggersList extends Fragment {
 
 
     }
+
+    public class parseBloggers extends AsyncTask<Void, Void, Void>{
+        private ProgressDialog pDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(getActivity());
+            pDialog.setMessage("Loading");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d("LogAqel", "Parsing Bloggers");
+            String[] bloggers = DataCollections_bloggers.bloggerNameEn;
+            int numBloggers = bloggers.length;
+            Log.d("LogAqel Number of bloggers", Integer.toString(numBloggers));
+            final SharedPreferences bloggersNum = getActivity().getSharedPreferences("bloggersNum", Context.MODE_PRIVATE);
+            final int bloggersNumber = bloggersNum.getInt("bloggersNum", numBloggers);
+            ParseQuery<ParseObject> query;
+            query = ParseQuery.getQuery("bloggers");
+            query.whereGreaterThan("blogger_id", bloggersNumber);
+            query.setLimit(40);
+            // Sorts the results in descending order by the score field
+            query.orderByDescending("blogger_id");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> userList, ParseException e) {
+                    if (e == null) {
+                        Log.d("score", "Retrieved " + userList.size() + " posts");
+                        DatabaseHelper data = new DatabaseHelper(getActivity());
+
+                        int new_blogger_num = bloggersNumber;
+                        for (int i=0; i<userList.size(); i++){
+                            ParseObject parseList = userList.get(i);
+                            try{
+                                data.open();
+                                if (new_blogger_num < parseList.getInt("blogger_id")){
+                                    new_blogger_num = parseList.getInt("blogger_id");
+                                }
+
+                                Log.d("LogAqel notification Number", Integer.toString(parseList.getInt("blogger_id")));
+
+                                String blogger_name_en = parseList.getString("blogger_name_en");
+                                String blogger_name_mal = parseList.getString("blogger_name_mal");
+                                String blog_name_en = parseList.getString("blog_name_en");
+                                String blog_name_mal = parseList.getString("blog_name_mal");
+                                String about_blogger = parseList.getString("about_blogger");
+                                String phone_number = parseList.getString("phone_number");
+                                String gmail = parseList.getString("gmail");
+                                String facebook_id = parseList.getString("facebook_id");
+                                String googleplus_id = parseList.getString("googleplus_id");
+                                String blog_link = parseList.getString("blog_link");
+                                int rank = parseList.getInt("rank");
+                                int blogger_id = parseList.getInt("blogger_id");
+                                //String blogger_name_en, String blogger_name_mal, String blog_name_en , String blog_name_mal, String description, java.lang.String phone_number, java.lang.String email, java.lang.String google_plus, java.lang.String facebook, int weight, int loadedOrNot, String blog_url
+                                data.addBlogger(blogger_id, blogger_name_en, blogger_name_mal, blog_name_en, blog_name_mal,about_blogger,phone_number,gmail,googleplus_id,facebook_id, rank, 0, blog_link);
+                                data.close();
+                            }catch (NullPointerException es){
+                                es.printStackTrace();
+                            }
+
+                        }
+                        SharedPreferences.Editor editor = bloggersNum.edit();
+                        editor.putInt("bloggersNum", new_blogger_num);
+                        editor.putLong("lastBloggersParsedTime", System.currentTimeMillis());
+                        editor.commit();
+
+                    } else {
+                        Log.d("score", "Error: " + e.getMessage());
+                    }
+                }
+            });
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            pDialog.dismiss();
+        }
+    }
+
+
+    public class parseBloggersInBackground extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Log.d("LogAqel", "Parsing Bloggers");
+            String[] bloggers = DataCollections_bloggers.bloggerNameEn;
+            int numBloggers = bloggers.length;
+            Log.d("LogAqel Number of bloggers", Integer.toString(numBloggers));
+            final SharedPreferences bloggersNum = getActivity().getSharedPreferences("bloggersNum", Context.MODE_PRIVATE);
+            final int bloggersNumber = bloggersNum.getInt("bloggersNum", numBloggers);
+            ParseQuery<ParseObject> query;
+            query = ParseQuery.getQuery("bloggers");
+            query.whereGreaterThan("blogger_id", bloggersNumber);
+            query.setLimit(40);
+            // Sorts the results in descending order by the score field
+            query.orderByDescending("blogger_id");
+            query.findInBackground(new FindCallback<ParseObject>() {
+                public void done(List<ParseObject> userList, ParseException e) {
+                    if (e == null) {
+                        Log.d("score", "Retrieved " + userList.size() + " posts");
+                        DatabaseHelper data = new DatabaseHelper(getActivity());
+
+                        int new_blogger_num = bloggersNumber;
+                        for (int i=0; i<userList.size(); i++){
+                            ParseObject parseList = userList.get(i);
+                            try{
+                                data.open();
+                                if (new_blogger_num < parseList.getInt("blogger_id")){
+                                    new_blogger_num = parseList.getInt("blogger_id");
+                                }
+
+                                Log.d("LogAqel notification Number", Integer.toString(parseList.getInt("blogger_id")));
+
+                                String blogger_name_en = parseList.getString("blogger_name_en");
+                                String blogger_name_mal = parseList.getString("blogger_name_mal");
+                                String blog_name_en = parseList.getString("blog_name_en");
+                                String blog_name_mal = parseList.getString("blog_name_mal");
+                                String about_blogger = parseList.getString("about_blogger");
+                                String phone_number = parseList.getString("phone_number");
+                                String gmail = parseList.getString("gmail");
+                                String facebook_id = parseList.getString("facebook_id");
+                                String googleplus_id = parseList.getString("googleplus_id");
+                                String blog_link = parseList.getString("blog_link");
+                                int rank = parseList.getInt("rank");
+                                int blogger_id = parseList.getInt("blogger_id");
+                                //String blogger_name_en, String blogger_name_mal, String blog_name_en , String blog_name_mal, String description, java.lang.String phone_number, java.lang.String email, java.lang.String google_plus, java.lang.String facebook, int weight, int loadedOrNot, String blog_url
+                                data.addBlogger(blogger_id, blogger_name_en, blogger_name_mal, blog_name_en, blog_name_mal,about_blogger,phone_number,gmail,googleplus_id,facebook_id, rank, 0, blog_link);
+                                data.close();
+                            }catch (NullPointerException es){
+                                es.printStackTrace();
+                            }
+
+                        }
+                        SharedPreferences.Editor editor = bloggersNum.edit();
+                        editor.putInt("bloggersNum", new_blogger_num);
+                        editor.putLong("lastBloggersParsedTime", System.currentTimeMillis());
+                        editor.commit();
+
+                    } else {
+                        Log.d("score", "Error: " + e.getMessage());
+                    }
+                }
+            });
+
+            return null;
+        }
+
+
+    }
+
+
 }
 

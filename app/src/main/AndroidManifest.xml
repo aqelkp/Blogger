@@ -85,17 +85,32 @@
         </activity>
         <activity
             android:name=".PlaceHolderActivity"
-            android:label="@string/title_activity_place_holder"
+            android:label="@string/title_activity_place_holder" >
+        </activity>
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity
+            android:name=".ViewCompletePost"
+            android:label="Comments" >
+        </activity>
+        <activity
+            android:name=".CategoryViewActivity"
+            android:label="@string/title_activity_category_view" >
+        </activity>
+        <activity
+            android:name=".NewBlogger"
+            android:label="@string/title_activity_new_blogger"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="in.aqel.blogger.MainActivity" />
         </activity>
         <activity
-            android:name="com.google.android.gms.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:theme="@android:style/Theme.Translucent" />
-
+            android:name=".NewsPaperLoading"
+            android:label="@string/title_activity_news_paper_loading" >
+        </activity>
     </application>
 
 </manifest>

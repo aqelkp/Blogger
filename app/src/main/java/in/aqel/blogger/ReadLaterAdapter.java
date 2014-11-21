@@ -91,6 +91,7 @@ public class ReadLaterAdapter extends CursorAdapter {
         final String strDate = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(4)));
         final String strContent = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(3)));
         final String strTitle = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(5)));
+        final String link = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(9)));
         final int id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(0)));
         final int blogger_id = cursor.getInt(cursor.getColumnIndex(cursor.getColumnName(2)));
         final String postId = cursor.getString(cursor.getColumnIndex(cursor.getColumnName(1)));
@@ -107,6 +108,7 @@ public class ReadLaterAdapter extends CursorAdapter {
                 intent.putExtra("blogger_id", blogger_id);
                 intent.putExtra("isFav", isFav);
                 intent.putExtra("activityBefore", "readLater");
+                intent.putExtra("link", link);
                 context.startActivity(intent);
             }
         });

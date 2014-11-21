@@ -4,12 +4,8 @@
     <string name="app_name">Vayanashala</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="version_name">1.1.0</string>
     <string name="title_activity_main">Vayanashala</string>
-    <string name="title_section1">Home</string>
-    <string name="title_section2">About Me</string>
-    <string name="title_section3">About Developer</string>
-    <string name="title_section4">Section 2</string>
-    <string name="title_section5">Section 3</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -23,5 +19,9 @@
     <string name="title_activity_place_holder">PlaceHolderActivity</string>
     <string name="banner_ad_unit_id">ca-app-pub-0669510740947238/8724906539</string>
     <string name="title_activity_about_blogger">AboutBloggerActivity</string>
+    <string name="title_activity_view_complete_post">ViewCompletePost</string>
+    <string name="title_activity_category_view">Category</string>
+    <string name="title_activity_new_blogger">Add New Blogger</string>
+    <string name="title_activity_news_paper_loading">News Paper</string>
 
 </resources>
