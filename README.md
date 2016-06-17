@@ -13,3 +13,7 @@ Following is not related to the project by any mean
         wm.removeView(overlay);
         overlay = null;
     }
+
+# Working example of SMS reciever
+http://www.androidhive.info/2015/08/android-adding-sms-verification-like-whatsapp-part-2/
+
